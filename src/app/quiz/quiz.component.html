@@ -1,0 +1,45 @@
+<body>
+  <h1>Quiz</h1>
+
+  <!-- <form #NameForm="ngForm" >
+    <label>Name:</label>
+
+    <input type="text"/> 
+ </form> -->
+
+<input value ="{{question.choice_1}}" name = "question{{i + 1 }}" ngModel type="radio">
+<label for="">{{question.choice_1}}</label>
+ <form #qForm="ngForm" (ngSubmit)="submitQuiz(qForm)">
+
+  <div  *ngFor="let question of questions; index as i">
+    
+    <h3>Question: {{ question.question_name }}</h3>
+
+    <div class="choices">
+      <input
+        type="radio"
+        (click)="check(question.choice_1, question.answer, i)"
+      />
+      {{ question.choice_1 }}
+      <input
+        type="radio"
+        (click)="check(question.choice_2, question.answer, i)"
+      />
+      {{ question.choice_2 }}
+      <input
+        type="radio"
+        (click)="check(question.choice_3, question.answer, i)"
+      />
+      {{ question.choice_3 }}
+      <input
+        type="radio"
+        (click)="check(question.choice_4, question.answer, i)"
+      />
+      {{ question.choice_4 }}
+    </div>
+    <button>Submit</button>
+  </form>
+ 
+
+  
+</body>

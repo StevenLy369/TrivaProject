@@ -1,0 +1,23 @@
+
+
+
+body {
+    background-color: azure;
+}
+h1 {
+    color: purple;
+}
+
+
+
+
+
+
+
+.choices {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    background-color: azure;
+
+}
