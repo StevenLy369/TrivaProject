@@ -175,21 +175,33 @@ var QuizService = /** @class */ (function () {
         this.http = http;
         this.router = router;
         this.score = 0;
+        this.quizQuestions = [];
     }
     QuizService.prototype.getQuestions = function () {
         return this.http.get("/api/questions", { responseType: "json" });
     };
-    QuizService.prototype.getScore = function (form, questions, name) {
+    QuizService.prototype.setQuestions = function (questions) {
+        this.questions = questions;
+    };
+    QuizService.prototype.getScore = function (form, questions) {
         var answerArray = Object.values(form.value);
-        for (var i = 0; i < answerArray.length; i++) {
-            if (answerArray[i] === questions[i].answer) {
+        this.name = answerArray[0];
+        console.log(this.name);
+        for (var i = 1; i < answerArray.length; i++) {
+            if (answerArray[i] === questions[i - 1].answer) {
                 console.log("Got one right!.");
+                console.log(answerArray);
                 this.score++;
             }
         }
         this.router.navigate(["/results"]);
         console.log(this.score);
-        console.log(name);
+    };
+    QuizService.prototype.getResult = function () {
+        return this.http.get("/scores", { responseType: "json" });
+    };
+    QuizService.prototype.getResults = function () {
+        return this.score;
     };
     QuizService.prototype.postScores = function (score) {
         return this.http.post("/api/scores", score, { responseType: "json" });
@@ -227,7 +239,7 @@ module.exports = "\r\n\r\n\r\nbody {\r\n    background-color: azure;\r\n}\r\nh1 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<body>\n  <h1>Quiz</h1>\n\n  <form #NameForm=\"ngForm\" >\n    <label>Name:</label>\n\n    <input type=\"text\" ngModel name = \"name\"/> \n </form>\n\n  <form #qForm=\"ngForm\" (ngSubmit)=\"submitQuiz(qForm)\">\n\n    <div *ngFor=\"let question of questions; index as i\">\n      <p>{{ question.question_name }}</p>\n      <input\n        value=\"{{ question.choice_1 }}\"\n        name=\"question{{ i + 1 }}\"\n        ngModel\n        type=\"radio\"\n      />\n      <label for=\"\">{{ question.choice_1 }}</label>\n\n      <input\n        value=\"{{ question.choice_2 }}\"\n        name=\"question{{ i + 1 }}\"\n        ngModel\n        type=\"radio\"\n      />\n      <label for=\"\">{{ question.choice_2 }}</label>\n\n      <input\n        value=\"{{ question.choice_3 }}\"\n        name=\"question{{ i + 1 }}\"\n        ngModel\n        type=\"radio\"\n      />\n      <label for=\"\">{{ question.choice_3 }}</label>\n\n      <input\n        value=\"{{ question.choice_4 }}\"\n        name=\"question{{ i + 1 }}\"\n        ngModel\n        type=\"radio\"\n      />\n      <label for=\"\">{{ question.choice_4 }}</label>\n    </div>\n    <button>Submit</button>\n  </form>\n</body>\n"
+module.exports = "<body>\n  <h1>Quiz</h1>\n\n  <!-- <form #NameForm=\"ngForm\" >\n    <label>Name:</label>\n  <input type=\"text\" [(ngModel)]=\"name\" name = \"name\"/> \n </form> -->\n\n  <form #qForm=\"ngForm\" (ngSubmit)=\"submitQuiz(qForm)\">\n\n\n      <label>Name:</label>\n      <input type=\"text\" [(ngModel)]=\"name\" name = \"name\"/> \n\n    <div *ngFor=\"let question of questions; index as i\">\n      <p>{{ question.question_name }}</p>\n      <input\n        value=\"{{ question.choice_1 }}\"\n        name=\"question{{ i + 1 }}\"\n        ngModel\n        type=\"radio\"\n      />\n      <label for=\"\">{{ question.choice_1 }}</label>\n\n      <input\n        value=\"{{ question.choice_2 }}\"\n        name=\"question{{ i + 1 }}\"\n        ngModel\n        type=\"radio\"\n      />\n      <label for=\"\">{{ question.choice_2 }}</label>\n\n      <input\n        value=\"{{ question.choice_3 }}\"\n        name=\"question{{ i + 1 }}\"\n        ngModel\n        type=\"radio\"\n      />\n      <label for=\"\">{{ question.choice_3 }}</label>\n\n      <input\n        value=\"{{ question.choice_4 }}\"\n        name=\"question{{ i + 1 }}\"\n        ngModel\n        type=\"radio\"\n      />\n      <label for=\"\">{{ question.choice_4 }}</label>\n    </div>\n    <button>Submit</button>\n  </form>\n</body>\n"
 
 /***/ }),
 
@@ -244,15 +256,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _quiz_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../quiz.service */ "./src/app/quiz.service.ts");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-
 
 
 
 var QuizComponent = /** @class */ (function () {
-    function QuizComponent(quizService, route) {
+    function QuizComponent(quizService) {
         this.quizService = quizService;
-        this.route = route;
         this.initialArray = [
             false,
             false,
@@ -270,7 +279,8 @@ var QuizComponent = /** @class */ (function () {
         var _this = this;
         this.quizService.getQuestions().subscribe(function (response) {
             _this.questions = response;
-            console.log(response);
+            _this.quizService.setQuestions(response);
+            // console.log(response);
         });
     };
     QuizComponent.prototype.check = function (choice, answer, index) {
@@ -280,13 +290,12 @@ var QuizComponent = /** @class */ (function () {
         else {
             this.initialArray[index] = false;
         }
-        console.log("Hello");
+        // console.log("Hello");
     };
     QuizComponent.prototype.submitQuiz = function (form) {
-        this.quizService.getScore(form, this.questions, name);
+        this.quizService.getScore(form, this.questions);
         console.log(form.value);
-        // this.apiService.getScore(form, this.questions)
-        console.log("yees");
+        // console.log("yees");
     };
     QuizComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -294,7 +303,7 @@ var QuizComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./quiz.component.html */ "./src/app/quiz/quiz.component.html"),
             styles: [__webpack_require__(/*! ./quiz.component.css */ "./src/app/quiz/quiz.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_quiz_service__WEBPACK_IMPORTED_MODULE_2__["QuizService"], _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_quiz_service__WEBPACK_IMPORTED_MODULE_2__["QuizService"]])
     ], QuizComponent);
     return QuizComponent;
 }());
@@ -310,7 +319,7 @@ var QuizComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3Jlc3VsdHMvcmVzdWx0cy5jb21wb25lbnQuY3NzIn0= */"
+module.exports = "h1 {\r\n    size: 30px;\r\n    \r\n}\r\n\r\nbody {\r\n    width: 100%;\r\n    height: 100%;\r\n    background-color: beige;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdWx0cy9yZXN1bHRzLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxVQUFVOztBQUVkOztBQUVBO0lBQ0ksV0FBVztJQUNYLFlBQVk7SUFDWix1QkFBdUI7QUFDM0IiLCJmaWxlIjoic3JjL2FwcC9yZXN1bHRzL3Jlc3VsdHMuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbImgxIHtcclxuICAgIHNpemU6IDMwcHg7XHJcbiAgICBcclxufVxyXG5cclxuYm9keSB7XHJcbiAgICB3aWR0aDogMTAwJTtcclxuICAgIGhlaWdodDogMTAwJTtcclxuICAgIGJhY2tncm91bmQtY29sb3I6IGJlaWdlO1xyXG59Il19 */"
 
 /***/ }),
 
@@ -321,7 +330,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  results works!\n</p>\n"
+module.exports = "<body>\n  \n\n\n<h1>{{quizService.name}} scored {{score}} / 10 </h1>\n\n</body>\n\n"
 
 /***/ }),
 
@@ -344,6 +353,9 @@ __webpack_require__.r(__webpack_exports__);
 var ResultsComponent = /** @class */ (function () {
     function ResultsComponent(quizService) {
         this.quizService = quizService;
+        this.questions = this.quizService.questions;
+        this.name = this.quizService.name;
+        this.score = this.quizService.score;
     }
     ResultsComponent.prototype.ngOnInit = function () {
     };

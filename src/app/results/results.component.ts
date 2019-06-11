@@ -8,23 +8,30 @@ import { Router } from "@angular/router";
   styleUrls: ['./results.component.css']
 })
 export class ResultsComponent implements OnInit {
-  answerArray:any;
+  questions:any;
+  name:string;
+  score:number;
 
 
+  constructor(private quizService: QuizService) {
 
-  constructor(private quizService: QuizService, private route: Router) {}
+
+  this.questions = this.quizService.questions;
+    this.name = this.quizService.name;
+    this.score = this.quizService.score;
+
+
+  }
 
 
   ngOnInit() {
-  }
+  
 
-  getResult():any {
-    console.log(this.answerArray);
-    return this.answerArray;
-    
 
   }
 
+  
+  
 
 
 

@@ -9,10 +9,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 })
 export class QuizComponent implements OnInit {
   questions: any;
-  name:any;
+  
  
   initialArray: any[] = [
-    
     false,
     false,
     false,
@@ -25,11 +24,12 @@ export class QuizComponent implements OnInit {
     false
   ];
 
-  constructor(private quizService: QuizService, private route: Router) {}
+  constructor(private quizService: QuizService) {}
 
   ngOnInit() {
       this.quizService.getQuestions().subscribe(response => {
       this.questions = response;
+      this.quizService.setQuestions(response)
       // console.log(response);
 
      });
@@ -50,8 +50,8 @@ export class QuizComponent implements OnInit {
   
     this.quizService.getScore(form, this.questions);
     console.log(form.value);
-    console.log(name);
-     // this.apiService.getScore(form, this.questions)
+    
+    
 
     // console.log("yees");
   }
