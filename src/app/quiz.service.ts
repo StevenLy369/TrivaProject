@@ -7,6 +7,9 @@ import { Router } from "@angular/router";
 })
 export class QuizService {
   score = 0;
+  questions:any;
+  
+  
 
   constructor(
     private http: HttpClient,
@@ -17,31 +20,42 @@ export class QuizService {
     return this.http.get("/api/questions", { responseType: "json" });
   }
 
-  getScores(form, questions) {
-    // return this.http.get("/api/scores", { responseType: "json" });
-    let answerArray = Object.values(form.value);
-    console.log(answerArray);
+  getScore(form, questions) {
     let answerArray = Object.values(form.value);
 
-    for( let i = 0; i < answerArray.length; i++){
-      if (answerArray[i] === questions[i].answer) {
-        this.score++
-      }
-    }
-    
-  }
-
-  postScores(score) {
-    return this.http.post("/api/scores", score, { responseType: "json" });
-  }
-
-  calculateScore(intialArray) {
-    for (let i = 0; i < intialArray.length; i++) {
-      if (intialArray == true) {
+    for (let i = 1; i < answerArray.length; i++) {
+      if (answerArray[0] === questions[0].answer) {
+        console.log("Got one right!.");
         this.score++;
       }
     }
-
     this.router.navigate(["/results"]);
+    console.log(this.score);
+    
+
   }
+
+    
+   
+
+  postScores(score) {
+    return this.http.post("/api/scores", score, { responseType: "json" });
+  };
+
+
+
+
+  // calculateScore(form) {
+  //   console.log(form);
+  // let answerArray = Object.values(form.value);
+  //  console.log(answerArray);
+  //     for( let i = 0; i < answerArray.length; i++){
+  //       if (answerArray[i] === this.questions[i].answer) {
+  //         this.score++
+  //      }
+  //    }
+  
+
+  //   this.router.navigate(["/results"]);
+  // }
 }

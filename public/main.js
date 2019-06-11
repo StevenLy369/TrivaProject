@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\r\nh1 {\r\n    color: purple;\r\n}\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n.choices {\r\n    display: flex;\r\n    text-align: center;\r\n    justify-content: space-between;\r\n\r\n}\r\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvYXBwLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUNBO0lBQ0ksYUFBYTtBQUNqQjs7Ozs7Ozs7QUFRQTtJQUNJLGFBQWE7SUFDYixrQkFBa0I7SUFDbEIsOEJBQThCOztBQUVsQyIsImZpbGUiOiJzcmMvYXBwL2FwcC5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiXHJcbmgxIHtcclxuICAgIGNvbG9yOiBwdXJwbGU7XHJcbn1cclxuXHJcblxyXG5cclxuXHJcblxyXG5cclxuXHJcbi5jaG9pY2VzIHtcclxuICAgIGRpc3BsYXk6IGZsZXg7XHJcbiAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XHJcblxyXG59XHJcbiJdfQ== */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FwcC5jb21wb25lbnQuY3NzIn0= */"
 
 /***/ }),
 
@@ -41,7 +41,7 @@ module.exports = "\r\nh1 {\r\n    color: purple;\r\n}\r\n\r\n\r\n\r\n\r\n\r\n\r\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n  <a routerLink=\"/quiz\" routerLinkActive =\"active\">Quiz</a>\n  <a routerLink=\"/results\" routerLinkActive =\"active\">Results</a>\n  <a routerLink=\"/score\" routerLinkActive =\"active\">Score</a>\n</div>"
+module.exports = "<h1>Hello</h1>\n\n<nav>\n  <a routerLink=\"/quiz\" routerLinkActive =\"active\">Quiz</a>\n  <a routerLink=\"/score\" routerLinkActive =\"active\">Score</a>\n</nav>\n\n<router-outlet></router-outlet>"
 
 /***/ }),
 
@@ -65,7 +65,7 @@ var AppComponent = /** @class */ (function () {
     function AppComponent(apiService) {
         var _this = this;
         this.apiService = apiService;
-        this.title = 'triviaproject';
+        this.title = "triviaproject";
         this.apiService.getQuestions().subscribe(function (response) {
             _this.questions = response;
             console.log(_this.questions);
@@ -73,7 +73,7 @@ var AppComponent = /** @class */ (function () {
     }
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-            selector: 'app-root',
+            selector: "app-root",
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.css */ "./src/app/app.component.css")]
         }),
@@ -119,7 +119,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var appRoutes = [
-    { path: "", redirectTo: '/quiz' },
+    { path: "", redirectTo: '/quiz', pathMatch: "full" },
     { path: "quiz", component: _quiz_quiz_component__WEBPACK_IMPORTED_MODULE_8__["QuizComponent"] },
     { path: "results", component: _results_results_component__WEBPACK_IMPORTED_MODULE_9__["ResultsComponent"] },
     { path: "scores", component: _scores_scores_component__WEBPACK_IMPORTED_MODULE_10__["ScoresComponent"] }
@@ -139,7 +139,7 @@ var AppModule = /** @class */ (function () {
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
                 _angular_common_http__WEBPACK_IMPORTED_MODULE_5__["HttpClientModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
-                _angular_router__WEBPACK_IMPORTED_MODULE_6__["RouterModule"],
+                _angular_router__WEBPACK_IMPORTED_MODULE_6__["RouterModule"].forRoot(appRoutes)
             ],
             providers: [_quiz_service__WEBPACK_IMPORTED_MODULE_7__["QuizService"]],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
@@ -165,27 +165,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+
 
 
 
 var QuizService = /** @class */ (function () {
-    function QuizService(http) {
+    function QuizService(http, router) {
         this.http = http;
+        this.router = router;
+        this.score = 0;
     }
     QuizService.prototype.getQuestions = function () {
         return this.http.get("/api/questions", { responseType: "json" });
     };
-    QuizService.prototype.getScores = function () {
-        return this.http.get("/api/scores", { responseType: "json" });
+    QuizService.prototype.getScore = function (form, questions, name) {
+        var answerArray = Object.values(form.value);
+        for (var i = 0; i < answerArray.length; i++) {
+            if (answerArray[i] === questions[i].answer) {
+                console.log("Got one right!.");
+                this.score++;
+            }
+        }
+        this.router.navigate(["/results"]);
+        console.log(this.score);
+        console.log(name);
     };
     QuizService.prototype.postScores = function (score) {
-        return this.http.post('/api/scores', score, { responseType: "json" });
+        return this.http.post("/api/scores", score, { responseType: "json" });
     };
+    ;
     QuizService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-            providedIn: 'root'
+            providedIn: "root"
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"]])
     ], QuizService);
     return QuizService;
 }());
@@ -201,7 +216,7 @@ var QuizService = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3F1aXovcXVpei5jb21wb25lbnQuY3NzIn0= */"
+module.exports = "\r\n\r\n\r\nbody {\r\n    background-color: azure;\r\n}\r\nh1 {\r\n    color: purple;\r\n}\r\n.choices {\r\n    display: flex;\r\n    text-align: center;\r\n    justify-content: center;\r\n    background-color: azure;\r\n\r\n}\r\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcXVpei9xdWl6LmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBR0E7SUFDSSx1QkFBdUI7QUFDM0I7QUFDQTtJQUNJLGFBQWE7QUFDakI7QUFRQTtJQUNJLGFBQWE7SUFDYixrQkFBa0I7SUFDbEIsdUJBQXVCO0lBQ3ZCLHVCQUF1Qjs7QUFFM0IiLCJmaWxlIjoic3JjL2FwcC9xdWl6L3F1aXouY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIlxyXG5cclxuXHJcbmJvZHkge1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogYXp1cmU7XHJcbn1cclxuaDEge1xyXG4gICAgY29sb3I6IHB1cnBsZTtcclxufVxyXG5cclxuXHJcblxyXG5cclxuXHJcblxyXG5cclxuLmNob2ljZXMge1xyXG4gICAgZGlzcGxheTogZmxleDtcclxuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICAgIGp1c3RpZnktY29udGVudDogY2VudGVyO1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogYXp1cmU7XHJcblxyXG59XHJcbiJdfQ== */"
 
 /***/ }),
 
@@ -212,7 +227,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h1>Quiz</h1>\n\n<div *ngFor=\"let question of questions; index as i\">\n  <h3>Question: {{ question.question_name}} </h3>\n\n\n  <div class =\"choices\">\n  <p> {{question.choice_1}}</p>\n  <p>{{ question.choice_2 }}</p>\n  <p> {{ question.choice_3}}</p>\n  <p> {{ question.choice_4}}</p>\n  </div>\n  \n  \n\n\n\n</div>"
+module.exports = "<body>\n  <h1>Quiz</h1>\n\n  <form #NameForm=\"ngForm\" >\n    <label>Name:</label>\n\n    <input type=\"text\" ngModel name = \"name\"/> \n </form>\n\n  <form #qForm=\"ngForm\" (ngSubmit)=\"submitQuiz(qForm)\">\n\n    <div *ngFor=\"let question of questions; index as i\">\n      <p>{{ question.question_name }}</p>\n      <input\n        value=\"{{ question.choice_1 }}\"\n        name=\"question{{ i + 1 }}\"\n        ngModel\n        type=\"radio\"\n      />\n      <label for=\"\">{{ question.choice_1 }}</label>\n\n      <input\n        value=\"{{ question.choice_2 }}\"\n        name=\"question{{ i + 1 }}\"\n        ngModel\n        type=\"radio\"\n      />\n      <label for=\"\">{{ question.choice_2 }}</label>\n\n      <input\n        value=\"{{ question.choice_3 }}\"\n        name=\"question{{ i + 1 }}\"\n        ngModel\n        type=\"radio\"\n      />\n      <label for=\"\">{{ question.choice_3 }}</label>\n\n      <input\n        value=\"{{ question.choice_4 }}\"\n        name=\"question{{ i + 1 }}\"\n        ngModel\n        type=\"radio\"\n      />\n      <label for=\"\">{{ question.choice_4 }}</label>\n    </div>\n    <button>Submit</button>\n  </form>\n</body>\n"
 
 /***/ }),
 
@@ -228,20 +243,58 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QuizComponent", function() { return QuizComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _quiz_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../quiz.service */ "./src/app/quiz.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+
+
 
 
 var QuizComponent = /** @class */ (function () {
-    function QuizComponent() {
+    function QuizComponent(quizService, route) {
+        this.quizService = quizService;
+        this.route = route;
+        this.initialArray = [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ];
     }
     QuizComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.quizService.getQuestions().subscribe(function (response) {
+            _this.questions = response;
+            console.log(response);
+        });
+    };
+    QuizComponent.prototype.check = function (choice, answer, index) {
+        if (choice === answer) {
+            this.initialArray[index] = true;
+        }
+        else {
+            this.initialArray[index] = false;
+        }
+        console.log("Hello");
+    };
+    QuizComponent.prototype.submitQuiz = function (form) {
+        this.quizService.getScore(form, this.questions, name);
+        console.log(form.value);
+        // this.apiService.getScore(form, this.questions)
+        console.log("yees");
     };
     QuizComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-            selector: 'app-quiz',
+            selector: "quiz",
             template: __webpack_require__(/*! ./quiz.component.html */ "./src/app/quiz/quiz.component.html"),
             styles: [__webpack_require__(/*! ./quiz.component.css */ "./src/app/quiz/quiz.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_quiz_service__WEBPACK_IMPORTED_MODULE_2__["QuizService"], _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"]])
     ], QuizComponent);
     return QuizComponent;
 }());
@@ -284,10 +337,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResultsComponent", function() { return ResultsComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _quiz_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../quiz.service */ "./src/app/quiz.service.ts");
+
 
 
 var ResultsComponent = /** @class */ (function () {
-    function ResultsComponent() {
+    function ResultsComponent(quizService) {
+        this.quizService = quizService;
     }
     ResultsComponent.prototype.ngOnInit = function () {
     };
@@ -297,7 +353,7 @@ var ResultsComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./results.component.html */ "./src/app/results/results.component.html"),
             styles: [__webpack_require__(/*! ./results.component.css */ "./src/app/results/results.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_quiz_service__WEBPACK_IMPORTED_MODULE_2__["QuizService"]])
     ], ResultsComponent);
     return ResultsComponent;
 }());

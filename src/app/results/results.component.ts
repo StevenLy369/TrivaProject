@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { QuizService } from '../quiz.service';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-results',
@@ -6,10 +8,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./results.component.css']
 })
 export class ResultsComponent implements OnInit {
+  answerArray:any;
 
-  constructor() { }
+
+
+  constructor(private quizService: QuizService, private route: Router) {}
+
 
   ngOnInit() {
   }
+
+  getResult():any {
+    console.log(this.answerArray);
+    return this.answerArray;
+    
+
+  }
+
+
+
 
 }

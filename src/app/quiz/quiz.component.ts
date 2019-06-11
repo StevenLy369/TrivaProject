@@ -9,7 +9,10 @@ import { ActivatedRoute, Router } from "@angular/router";
 })
 export class QuizComponent implements OnInit {
   questions: any;
+  name:any;
+ 
   initialArray: any[] = [
+    
     false,
     false,
     false,
@@ -25,12 +28,13 @@ export class QuizComponent implements OnInit {
   constructor(private quizService: QuizService, private route: Router) {}
 
   ngOnInit() {
-     this.questions = this.quizService.getQuestions().subscribe(response => {
+      this.quizService.getQuestions().subscribe(response => {
       this.questions = response;
+      // console.log(response);
 
      });
 
-    this.questions= this.quizService.getQuestions();
+    
   }
   check(choice, answer, index) {
     if (choice === answer) {
@@ -39,13 +43,16 @@ export class QuizComponent implements OnInit {
       this.initialArray[index] = false;
     }
 
-    console.log("Hello");
+    // console.log("Hello");
   }
 
   submitQuiz(form) {
   
-    this.quizService.calculateScore( form.value, this.initialArray);
+    this.quizService.getScore(form, this.questions);
+    console.log(form.value);
+    console.log(name);
+     // this.apiService.getScore(form, this.questions)
 
-    console.log("yees");
+    // console.log("yees");
   }
 }
